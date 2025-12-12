@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 import streamlit as st
 from openai import OpenAI
+import json
 
 # Show title and description.
-st.title("�‍👩‍👧‍👦 학부모-교사 관계 상담 챗봇")
+st.title("👨‍👩‍👧‍👦 학부모-교사 관계 상담 챗봇")
 st.write(
     "이 챗봇은 학부모와 교사 간의 관계, 소통, 협력에 관한 질문에 전문적으로 답변합니다. "
     "사용하려면 OpenAI API 키가 필요합니다. [여기](https://platform.openai.com/account/api-keys)에서 발급받을 수 있습니다."
@@ -96,8 +98,11 @@ IMPORTANT: All responses must be in Korean."""
 
         # Generate a response using the OpenAI API.
         # Include system message for specialized responses
-        messages_for_api = [st.session_state.system_message] + [
-            {"role": m["role"], "content": m["content"]}
+        # Ensure all content is properly encoded as strings
+        messages_for_api = [
+            {"role": "system", "content": str(st.session_state.system_message["content"])}
+        ] + [
+            {"role": str(m["role"]), "content": str(m["content"])}
             for m in st.session_state.messages
         ]
         
