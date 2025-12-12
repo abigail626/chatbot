@@ -18,9 +18,19 @@ if not openai_api_key:
     st.info("계속하려면 OpenAI API 키를 입력해주세요.", icon="🗝️")
 else:
 
-    # Create an OpenAI client - clean the API key first
-    clean_api_key = openai_api_key.strip()
-    client = OpenAI(api_key=clean_api_key)
+    # Create an OpenAI client - ensure API key is clean ASCII string
+    try:
+        # Convert to string and remove any whitespace
+        clean_api_key = str(openai_api_key).strip()
+        # Encode and decode to ensure ASCII compatibility
+        clean_api_key = clean_api_key.encode('ascii').decode('ascii')
+        client = OpenAI(api_key=clean_api_key)
+    except UnicodeEncodeError:
+        st.error("API 키에 잘못된 문자가 포함되어 있습니다. ASCII 문자만 사용해주세요.")
+        st.stop()
+    except Exception as e:
+        st.error(f"OpenAI 클라이언트 생성 중 오류가 발생했습니다: {str(e)}")
+        st.stop()
 
     # Create a session state variable to store the chat messages. This ensures that the
     # messages persist across reruns.
