@@ -18,11 +18,9 @@ if not openai_api_key:
     st.info("계속하려면 OpenAI API 키를 입력해주세요.", icon="🗝️")
 else:
 
-    # Create an OpenAI client with explicit encoding settings
-    client = OpenAI(
-        api_key=openai_api_key,
-        default_headers={"Content-Type": "application/json; charset=utf-8"}
-    )
+    # Create an OpenAI client - clean the API key first
+    clean_api_key = openai_api_key.strip()
+    client = OpenAI(api_key=clean_api_key)
 
     # Create a session state variable to store the chat messages. This ensures that the
     # messages persist across reruns.
