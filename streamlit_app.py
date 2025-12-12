@@ -23,7 +23,10 @@ else:
     # messages persist across reruns.
     if "messages" not in st.session_state:
         st.session_state.messages = []
-        # Add system message to specialize the chatbot
+    
+    # Add system message to specialize the chatbot
+    # Always set this to ensure it exists
+    if "system_message" not in st.session_state:
         st.session_state.system_message = {
             "role": "system",
             "content": """당신은 학부모와 교사 간의 관계에 전문화된 상담 전문가입니다. 
